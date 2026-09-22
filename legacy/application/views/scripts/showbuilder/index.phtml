@@ -1,41 +1,181 @@
 <?php echo $this->csrf ?>
 
 <div id="library_content" class="lib-content tabs content-pane wide-panel">
-    <div>
-        <h2 id="library_title"><?php echo _("Dashboard") . " - " ?><span id="library_filter"></span></h2>
+  <div>
+    <h2 id="library_title"><?php echo _("Dashboard") . " - " ?><span id="library_filter"></span></h2>
+  </div>
+
+  <div class="panel-header">
+    <div id="advanced-options" class="btn-group">
+      <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+        <span id="lib-filter-message"></span>
+        <span class="caret"></span>
+      </button>
+      <div id="advanced_search" class="advanced_search form-horizontal dropdown-menu"></div>
     </div>
-    <div class="panel-header">
-        <div id="advanced-options" class="btn-group">
-            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-                <span id="lib-filter-message"></span>
-                <span class="caret"></span>
-            </button>
-            <div id="advanced_search" class="advanced_search form-horizontal dropdown-menu"></div>
-        </div>
-    </div>
-    <div class="outer-datatable-wrapper">
-        <table id="library_display" cellpadding="0" cellspacing="0" class="datatable"></table>
-        <table id="podcast_table" cellpadding="0" cellspacing="0" class="datatable"></table>
-    </div>
+  </div>
+  <div class="outer-datatable-wrapper">
+    <table id="library_display" cellpadding="0" cellspacing="0" class="datatable"></table>
+    <table id="podcast_table" cellpadding="0" cellspacing="0" class="datatable"></table>
+  </div>
 </div>
 
-<div id="show_builder" class="sb-content content-pane wide-panel">
-    <div class="panel-header">
-        <ul class="nav nav-tabs">
-            <li id="schedule-tab" data-tab-id="0" role="presentation" class="active">
-                <a href="javascript:void(0)" class="tab-name" title="<?php echo _("Scheduled Shows") ?>">
-                    <?php echo _("Scheduled Shows") ?>
-                    <span href='#' class='lib_pl_close icon-remove'></span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="outer-datatable-wrapper active-tab">
-        <table id="show_builder_table" cellpadding="0" cellspacing="0" class="datatable"></table>
-        <div class="sb-timerange">
-            <?php echo $this->sb_form; ?>
+<div id="show_builder" class="sb-content content-pane wide-panel alpha">
+  <div class="panel-header">
+    <ul class="nav nav-tabs">
+      <li id="schedule-tab" data-tab-id="0" role="presentation" class="active">
+        <a href="javascript:void(0)" class="tab-name" title="<?php echo _("Scheduled Shows") ?>">
+          <?php echo _("Scheduled Shows") ?>
+          <span href='#' class='lib_pl_close icon-remove'></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="container">
+    <div class="modal" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body width300">
+            <form id="idForm" action="#" method="post">
+
+              <h2>Adding interaction</h2>
+              <div id="email-list-container" class=""></div>
+              <i class="fa fa-plus-circle" aria-hidden="true"
+                style="float: right; margin-right: 50px;"></i>
+              <div id="website-group" class="form-group">
+                <label class="control-label col-sm-2" for="email">Website:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="website" placeholder="Enter website"
+                    name="website">
+                </div>
+              </div>
+              <div id="msg-group" class="form-group">
+                <label class="control-label col-sm-2" for="email">Pop-up Message:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="msg" placeholder="Enter message"
+                    name="msg">
+                </div>
+              </div>
+              <div id="fp-group" class="form-group" style="display: flex; align-items: center;">
+                <label class="control-label" for="fp"
+                  style="white-space: nowrap; margin-right: 10px; margin-bottom: 0;">Fingerprint
+                  Version:</label>
+                <div style="width: 50%;">
+                  <select class="form-control" id="fp" name="fp">
+                    <option value="1">V1</option>
+                    <option value="2">V2</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="submit-success" data-submit="">
+                  <p>TuneURL Created Successfully!🎉</p>
+                </div>
+                <button class="btn btn-default successclosebtn" data-dismiss="modal"
+                  style="margin-left: 3px;">
+                  close
+                </button>
+                <img src="images/loader.gif" id="gif"
+                  style="display: block; margin: 0 auto; width: 100px; visibility: hidden;">
+
+                <div class="submit-error" data-submit="">
+                  <p>Error.</p>
+                </div>
+                <div class="form-group form-adjust">
+                </div>
+                <div class="form-group shrBtns">
+                  <input type="hidden" id="au_id" value="0" />
+                  <input type="hidden" id="trackName" value="" />
+                  <input type="hidden" id="spl_id" value="0" />
+                  <input type="hidden" id="triggerDisplayId" value="" />
+                  <input type="hidden" id="currentTunePrevId" value="" />
+
+                  <button class="btn btn-default shrBtn" data-dismiss="modal"
+                    style="margin-left: 3px;">
+                    Cancel
+                  </button>
+                  <button class="btn btn-warning ">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+  <!-----0------------------------------------------------------------------------------->
+  <div class="container">
+    <div class="modal" id="reportModal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <div id="chartContainer">
+              <h2>Engagement in the last 30 days</h2>
+              <!-- Legend will be inserted here dynamically -->
+              <div id="legend"></div>
+              <canvas id="pieChart" width="400" height="400"></canvas>
+              <button class="btn btn-default shrBtn" data-dismiss="modal" style="margin-top: 10px;">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-----0------------------------------------------------------------------------------->
+  <div class="container">
+    <div class="modal" id="tuneurlErrorModal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="width375">
+              <div id="msg-group" class="form-group">
+                <span style="font-size: 17px;" id="xTuneSpanID"></span>
+                <input type="hidden" id="xTuneurlId" value="" />
+                <input type="hidden" id="xTuneurlDesc" value="" />
+                <input type="hidden" id="updateTuneurlId" value="" />
+                <input type="hidden" id="infoId" value="" />
+                <div class="update-error" data-submit="">
+                  <p>Error.</p>
+                </div>
+                <div class="update-success" data-submit="">
+                  <p>TuneURL Updated Successfully!🎉</p>
+                </div>
+                <button class="btn btn-default updateCloseBtn" data-dismiss="modal"
+                  style="margin-left: 3px;">
+                  close
+                </button>
+                <img src="images/loader.gif" id="updateModalGif"
+                  style="display: block; margin: 0 auto; width: 100px; visibility: hidden;">
+
+              </div>
+              <div id="submitBtnDivId">
+                <button class="btn btn-default cancelBtn" data-dismiss="modal"
+                  style="margin-left: 3px;">
+                  Cancel
+                </button>
+                <button class="btn btn-warning " id="ap-tuneurl">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-----0------------------------------------------------------------------------------->
+
+  <div class="outer-datatable-wrapper active-tab">
+    <table id="show_builder_table" cellpadding="0" cellspacing="0" class="datatable"></table>
+    <div class="sb-timerange">
+      <?php echo $this->sb_form; ?>
+    </div>
+  </div>
 </div>
 
 <?php echo $this->dialog ?>
